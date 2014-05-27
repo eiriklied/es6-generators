@@ -1,6 +1,12 @@
 # Generators
 
-- a beginners guide
+> a beginners guide
+
+Note:  
+All examples in this repo can be run with the newest version of node (0.11.12 as of May 2014).
+To activate the ES6 (Harmony) features, start node with the `--harmony` flag
+when running the examples.
+
 
 ## What are generators?
 
@@ -105,27 +111,3 @@ Node supports ES6 as long as you're on 0.11.
 Have a look at the really cool [Koa](http://koajs.com/) framework, made by the
 people behind [Express](http://expressjs.com/). This framework uses generators
 to control the flow of your application using middleware.
-
-
-
-
-All examples in this repo can be run with the newest version of node (0.11.12 as of May 2014).
-To activate the ES6 (Harmony) features, start node with the `--harmony` flag
-when running the examples.
-
-
-  - Eksempel
-  - Får tilbake et objekt som kan kalles next() på hvor du får `value` og `done`
-  - Veldig kraftig fordi man kan definere en funksjon, men pause den og overlate videre kjøring til noe annet, og senere gi tilbake kontroll til funksjonen.
-    - dette fungerer veldig bra sammen med asynk kode!!
-- Hva kan det brukes til?
-  - evige sekvenser, iterere
-    - iterator example
-  - control flow som går meget godt samme med asynk kode
-    - ser ikke asynk ut
-    - exceptions bobler pent så de kan behandles som synkron kode
-    - vis eksempel på kall mot noen nettsider
-      - gjør de asynk
-      - legg på exception handling?
-
-- Praktisk for bruk i bibloteker. Vis eksempel på koa
