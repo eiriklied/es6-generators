@@ -89,7 +89,7 @@ continue.
 Lets look at an example. We are going to use a few libraries here but the concept
 shouldn't be hard do grasp.
 
-
+NOT DONE YET! gonna write some examples based on [example 3](3-get-sync.js) and [example 4](4-get-async.js) here.
 
 
 ## Found in..
