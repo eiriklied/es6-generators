@@ -19,7 +19,6 @@ You can use the keyword `yield` in front of any expression.
 function *myRandomNumbers() {
   console.log("myRandomNumbers starting!");
   yield 2;
-  console.log("myRandomNumbers running");
   yield 3;
   return 4;
 }
@@ -72,10 +71,13 @@ function *even(from, to) {
   }
 }
 
-var evenGenerator = even(2, 1000000);
-evenGenerator.next(); // {value: 2, done: false}
-evenGenerator.next(); // {value: 4, done: false}
-evenGenerator.next(); // {value: 6, done: false}
+// Note that we are not calling next() on the generator,
+// in ECMAScript 6 the for contruct will do this for us
+// on each iteration
+for(number of even(2, 1000000)) {
+  console.log(number)
+}
+
 ```
 
 

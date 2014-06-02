@@ -1,14 +1,12 @@
-function *generator() {
+function *myRandomNumbers() {
+  console.log("myRandomNumbers starting!");
   yield 2;
   yield 3;
   return 4;
 }
 
-var generatorObject = generator();
-console.log(generatorObject.next());
-console.log(generatorObject.next());
-console.log(generatorObject.next());
-
-// { value: 2, done: false }
-// { value: 3, done: false }
-// { value: 4, done: true }
+var generatorObj = myRandomNumbers();   // returning: [object Generator]
+var returned = generatorObj.next();     // printing:  'myRandomNumbers starting!'
+                                        // returning: { value: 2, done: false }
+returned = generatorObj.next();         // returning: { value: 3, done: false }
+returned = generatorObj.next();         // returning: { value: 4, done: true }
