@@ -17,7 +17,9 @@ You can use the keyword `yield` in front of any expression.
 
 ```javascript
 function *myRandomNumbers() {
+  console.log("myRandomNumbers starting!");
   yield 2;
+  console.log("myRandomNumbers running");
   yield 3;
   return 4;
 }
@@ -31,7 +33,7 @@ This `Generator` object will give you a method to call: `next()`. _Note that
 there are some more methods you can call, but we wont go into them now._
 
 When you call `next()` on the generator-object, the generator code will start
-executing until it comes to its first `yield` expression. Here, `next()` will
+executing, printing `myRandomNumbers starting!` until it comes to its first `yield` expression. Here, `next()` will
 return an object containg two things
 
 - `value`: the value of the yielded expression
@@ -44,10 +46,11 @@ freshly yielded value again.
 Lets run the `myRandomNumbers` generator from above and see what we get:
 
 ```javascript
-var generatorObj = myRandomNumbers();   // [object Generator]
-var returned = generatorObj.next(); // { value: 2, done: false }
-returned = generatorObj.next();     // { value: 3, done: false }
-returned = generatorObj.next();     // { value: 4, done: true }
+var generatorObj = myRandomNumbers();   // returning: [object Generator]
+var returned = generatorObj.next();     // printing:  'myRandomNumbers starting!'
+                                        // returning: { value: 2, done: false }
+returned = generatorObj.next();         // returning: { value: 3, done: false }
+returned = generatorObj.next();         // returning: { value: 4, done: true }
 ```
 
 ## Iterating
