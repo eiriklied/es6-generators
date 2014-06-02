@@ -12,3 +12,13 @@ function *even(from, to) {
 for(number of even(2, 1000000)) {
   console.log(number)
 }
+
+// Will output
+// 2
+// 4
+// 6
+// .
+// ..
+// ...
+// 999998
+// 1000000
