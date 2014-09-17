@@ -78,7 +78,8 @@ for(number of even(2, 1000000)) {
   console.log(number)
 }
 
-// Will output
+// Will output:
+//
 // 2
 // 4
 // 6
@@ -93,35 +94,104 @@ for(number of even(2, 1000000)) {
 
 ## Control flow
 
-Even though generators can be used to create advanced iterators, this is not
-where they will make a big change. But a huge win of generators is how you can
-control the flow of your application.
+Even though generators can be used to create advanced iterators, I don't think
+that is where they will make the biggest change. However, a huge win of
+generators is how you can control the flow of your application.
 
-I had some problems grasping this at first,
-but generators is actually a way of creating a function that can be suspended at
-any given time (by calling `yield`), giving control to some other part of the
-application. When your application is ready, it can start your function again
-calling `next()` on your generator. Do you see where this is going?
+Let's give this a try using promises.
 
-We can now actually do some fancy async programming, but instead of using
-callbacks, we can just pause a generator and start it up again when its time to
-continue.
+```javascript
+var get = require('./lib/get');
 
-Lets look at an example. We are going to use a few libraries here but the concept
-shouldn't be hard do grasp.
 
-NOT DONE YET! gonna write some examples based on [example 3](3-get-sync.js) and [example 4](4-get-async.js) here.
+function *findServer(){
+  console.log('Starting request');
+  var response = yield get('http://www.vg.no');
+  console.log('Request done! Server: %j', response.headers.server);
+}
+
+
+var requestsGenerator = findServer();
+// start generator and get the yielded value which is a promise
+var promise = requestsGenerator.next().value;
+promise.then(function(result) {
+  var status = requestsGenerator.next(result);
+});
+
+// Will output:
+//
+// Starting request
+// Request done! Server: "Apache/2.2.15 (CentOS)"
+```
+
+In the example above I use a utility function `get` that performs an http get
+request and returns a promise. Since we `yield` the promise, we can fetch the
+promise when calling `next()` on the generator object. After the promise has
+been fulfilled, we can call `next(result)` again, and the generator receives the
+result as a return value from the `yield`.
+
+Most of the code in the example above is not very interesting. What is really
+interesting though, is that _the code in the generator looks completely
+synchronous_ even though it is not! Since its a generator, the code is just
+pausing execution at the `yield`.
+
+Promises did a great job helping us with nested callbacks when doing async
+programming, but generators take this to a new level.
+
+Luckily, there are already some great libraries in place to help us with
+fulfilling promises, so we can focus on the code that actually does what we want.
+
+Lets rewrite the example above using the [co](https://github.com/visionmedia/co)
+library so we can focus on the get requests.
+
+```javascript
+var co = require('co');
+var get = require('./lib/get');
+
+co(function* () {
+  console.log('Starting request');
+  var response = yield get('http://www.vg.no');
+  console.log('Request done! Server: %j', response.headers.server);
+})()
+
+
+// Will output
+// Starting request
+// Request done! Server: "Apache/2.2.15 (CentOS)"
+```
+
+And it doesn't stop there! Why not make a couple of requests in parallell:
+
+```javascript
+var co = require('co');
+var get = require('./lib/get');
+
+co(function* () {
+  console.log('Starting requests');
+  var responses = yield [get('http://www.vg.no'), get('http://www.db.no')];
+  console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
+})()
+```
+
+This is just `co` doing all the heavy lifting. We pass an array of promises to
+yield and we get an array of promises back. Requests run in parallell, but still
+the code has no callbacks!
+
+## Exceptions?
+
+> TODO
+
 
 
 ## Found in..
 
-As of May 2014, Chrome has experimental support for ES6 using the
+Chrome has experimental support for ES6 using the
 [chrome://flags/#enable-javascript-harmony](chrome://flags/#enable-javascript-harmony)
 flag.
 
 Firefox has had support for generators for quite a while as far as I know.
 
-Node supports ES6 as long as you're on 0.11.
+Node supports ES6 as long as you're on 0.11. Run it with the `--harmony` flag!
 
 Have a look at the really cool [Koa](http://koajs.com/) framework, made by the
 people behind [Express](http://expressjs.com/). This framework uses generators
