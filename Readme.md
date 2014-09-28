@@ -136,12 +136,14 @@ synchronous_ even though it is not! Since its a generator, the code is just
 pausing execution at the `yield`.
 
 Promises did a great job helping us with nested callbacks when doing async
-programming, but generators take this to a new level.
+programming, but generators can take this to a new level.
+
+## Use a library
 
 Luckily, there are already some great libraries in place to help us with
 fulfilling promises, so we can focus on the code that actually does what we want.
 
-Lets rewrite the example above using the [co](https://github.com/visionmedia/co)
+Lets rewrite the previous example using the [co](https://github.com/visionmedia/co)
 library so we can focus on the get requests.
 
 ```javascript
@@ -153,7 +155,6 @@ co(function* () {
   var response = yield get('http://www.vg.no');
   console.log('Request done! Server: %j', response.headers.server);
 })()
-
 
 // Will output
 // Starting request
@@ -171,28 +172,54 @@ co(function* () {
   var responses = yield [get('http://www.vg.no'), get('http://www.db.no')];
   console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
 })()
+
+// Will output
+// Starting requests
+// Requests done! vg: "Apache/2.2.15 (CentOS)", db: "Apache/2.2.27"
+
 ```
 
 This is just `co` doing all the heavy lifting. We pass an array of promises to
-yield and we get an array of promises back. Requests run in parallell, but still
-the code has no callbacks!
+yield and we get an array of fullfilled promises back. Requests run in parallell,
+but still the code has no callbacks!
 
-## Exceptions?
+## Exceptions
 
-> TODO
+So what to do when we get exceptional behaviour, like a failed http-request?
+This is really up to the code that runs the generator to handle, but exceptions
+can bubble back to the generator. This means we will get some pretty familiar
+looking code when adding some error handling. Again, lets look at an example
+with co.
 
+```javascript
+var co = require('co');
+var get = require('./lib/get');
 
+co(function* () {
+  try {
+    console.log('Starting requests');
+    var responses = yield get('http://notfound.blabla');
+    console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
+  }
+  catch (e) {
+    console.log('Got error: %j for host %j', e.code, e.hostname);
+  }
+})()
 
-## Found in..
+// Will output
+// Starting requests
+// Got error: "ENOTFOUND" for host "notfound.blabla"
+```
 
-Chrome has experimental support for ES6 using the
-[chrome://flags/#enable-javascript-harmony](chrome://flags/#enable-javascript-harmony)
-flag.
+So we actually end up having synchronous looking code, with familiar error
+handling! So, any reason not to start using this today?
 
-Firefox has had support for generators for quite a while as far as I know.
+## Support
 
-Node supports ES6 as long as you're on 0.11. Run it with the `--harmony` flag!
+Node has support for generators when running on version 0.11 if you run it with
+the `--harmony` flag.
 
-Have a look at the really cool [Koa](http://koajs.com/) framework, made by the
-people behind [Express](http://expressjs.com/). This framework uses generators
-to control the flow of your application using middleware.
+If you want to run generators in the browser, Firefox and Chrome already support
+generators, but to run them in all browsers (and you probably will), you can use a
+transpiler like [traceur](https://github.com/google/traceur-compiler) or
+[regenerator](https://github.com/facebook/regenerator).
