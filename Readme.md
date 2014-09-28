@@ -3,9 +3,10 @@
 > a beginners guide
 
 Note:  
-All examples in this repo can be run with the newest version of node (0.11.12 as of May 2014).
-To activate the ES6 (Harmony) features, start node with the `--harmony` flag
-when running the examples.
+All examples shown here can be run with the newest version of node (0.11.14 as
+of September 2014). To activate the ES6 (Harmony) features, start node with the
+`--harmony` flag when running the examples. All example code can be found on
+[github](https://github.com/eiriklied/es6-generators).
 
 
 ## What are generators?
@@ -216,10 +217,9 @@ handling! So, any reason not to start using this today?
 
 ## Support
 
-Node has support for generators when running on version 0.11 if you run it with
-the `--harmony` flag.
+Node 0.11 supports generators when running with the `--harmony` flag.
 
-If you want to run generators in the browser, Firefox and Chrome already support
-generators, but to run them in all browsers (and you probably will), you can use a
-transpiler like [traceur](https://github.com/google/traceur-compiler) or
+Firefox and Chrome already support generators natively. To run them in all
+browsers (and you probably will), you can use a transpiler like
+[traceur](https://github.com/google/traceur-compiler) or
 [regenerator](https://github.com/facebook/regenerator).
