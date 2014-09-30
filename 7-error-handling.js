@@ -4,7 +4,7 @@ var get = require('./lib/get');
 co(function* () {
   try {
     console.log('Starting requests');
-    var responses = yield get('http://notfound.blabla');
+    var responses = yield [get('http://notfound.blabla'), get('http://db.no')];
     console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
   }
   catch (e) {
