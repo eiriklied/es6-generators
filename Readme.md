@@ -4,7 +4,7 @@
 
 ## What are generators?
 
-Generators were added in ECMAScript 6 and despite the name they look almost
+Generators are coming in ECMAScript 6 and despite the name they look almost
 identical to functions, with two small differences.
 
 1. The generator is declarated like a function, only its annotated with an
