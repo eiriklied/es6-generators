@@ -7,7 +7,7 @@
 Generators are coming in ECMAScript 6 and despite the name they look almost
 identical to functions, with two small differences.
 
-1. The generator is declarated like a function, only its annotated with an
+1. The generator is declared like a function, only annotated with an
 extra `*`.
 1. Inside the generator you can use the keyword `yield` in front of any
 expression.
@@ -34,7 +34,7 @@ executing, printing `myRandomNumbers starting!` until it comes to its first `yie
 return an object containing two things:
 
 - `value`: the value of the yielded expression
-- `done`: a flag telling us wether the generator is done running;
+- `done`: a flag telling us whether the generator is finished;
 
 If you call `next()` again, the generator will continue to execute from where
 it stopped until it reaches a new `yield`, and `next()` will return with the
@@ -250,11 +250,11 @@ Phew! So with this we have covered quite a bit. Don't worry if you didn't follow
 100% on every example. Just remember that generators are not magic, but they
 can do magic for our callback-based code!
 
-## Found in..
+## Found in…
 
 So this looks great, but can we use it today?
 
-If you are on the server (node),
+If you are on the server (Node.js),
 the answer is *yes*, as long as you are on 0.11 or newer. Just start with
 the `--harmony` flag to activate the ECMAScript 6 features.
 
