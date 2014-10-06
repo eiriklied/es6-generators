@@ -121,7 +121,7 @@ promise.then(function(result) {
 // Request done! Server: "Microsoft-IIS/7.5"
 ```
 
-The example above uses a utility function get that performs an http get
+The example above uses a utility function `get` that performs an http get
 request and returns a promise. Since we `yield` the promise, we can fetch the
 promise when calling `next()` on the generator object. After the promise has
 been fulfilled, we can call `next(result)` again, and the generator receives the
@@ -187,7 +187,7 @@ parallell, but still there is not a single callback in our code!
 So what to do when we get exceptional behaviour? Imagine one of the http requests in
 the example above. The code that runs the generator is in a position to do
 whatever it finds suitable. If we find it necessary, we can trigger an exception
-at the yield call inside the generator. This is done using a `throw` method we
+at the `yield` call inside the generator. This is done using a `throw` method we
 can call on the generator object. Let's have a look at how this works:
 
 ```javascript
