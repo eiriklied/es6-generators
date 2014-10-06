@@ -2,7 +2,7 @@ var get = require('./lib/get');
 
 function *findServer(){
   console.log('Starting request');
-  var response = yield get('http://www.vg.no');
+  var response = yield get('http://www.bekk.no');
   console.log('Request done! Server: %j', response.headers.server);
 }
 

@@ -40,7 +40,7 @@ If you call `next()` again, the generator will continue to execute from where
 it stopped until it reaches a new `yield`, and `next()` will return with the
 freshly yielded value again.
 
-Lets run the `myRandomNumbers` generator from above and see what we get:
+Let's run the `myRandomNumbers` generator from above and see what we get:
 
 ```javascript
 var generatorObj = myRandomNumbers();   // returning: [object Generator]
@@ -56,7 +56,7 @@ So this is pretty nice, we can now create generator objects and they kind of
 behave like iterators since you call `next()` on them. In fact, lets create an
 iterator!
 
-Lets say you want to iterate over a laaarge set of even numbers, but
+Say you want to iterate over a laaarge set of even numbers, but
 creating a huge array to loop over would just take too much memory. Now you can
 create a generator creating even numbers on the fly.
 
@@ -92,7 +92,7 @@ for(number of even(2, 1000000)) {
 
 ## Control flow
 
-Even though generators can be used to create advanced iterators, it's not their
+Even though generators can be used to create advanced iterators, that's not their
 biggest sweet spot. The coolest thing about generators is how you
 can control the flow of your application.
 
@@ -104,7 +104,7 @@ var get = require('./lib/get');
 
 function *findServer(){
   console.log('Starting request');
-  var response = yield get('http://www.vg.no');
+  var response = yield get('http://www.bekk.no');
   console.log('Request done! Server: %j', response.headers.server);
 }
 
@@ -118,10 +118,10 @@ promise.then(function(result) {
 // Will output:
 //
 // Starting request
-// Request done! Server: "Apache/2.2.15 (CentOS)"
+// Request done! Server: "Microsoft-IIS/7.5"
 ```
 
-In the example above I use a utility function `get` that performs an http get
+The example above uses a utility function get that performs an http get
 request and returns a promise. Since we `yield` the promise, we can fetch the
 promise when calling `next()` on the generator object. After the promise has
 been fulfilled, we can call `next(result)` again, and the generator receives the
@@ -132,7 +132,7 @@ interesting though, is that _the code in the generator looks completely
 synchronous_ even though it is not! Since its a generator, the code is just
 pausing execution at the `yield`.
 
-Promises did a great job helping us against nested callback hell when doing async
+Promises did a great job helping us avoid nested callback hell when doing async
 programming, but generators takes this to a whole new level.
 
 ## Use a library
@@ -141,8 +141,9 @@ Luckily, there are already some great libraries in place to help us with
 fulfilling promises and handling callbacks, so we can focus on the code that
 matters to us.
 
-Lets rewrite the previous example using the [co](https://github.com/visionmedia/co)
-library so we can focus on the get requests.
+[co](https://github.com/visionmedia/co) is a library for generator based
+flow-control goodness for nodejs and the browser, using thunks or promises.
+Lets rewrite the previous example using co so we can focus on the get requests.
 
 ```javascript
 var co = require('co');
@@ -150,13 +151,13 @@ var get = require('./lib/get');
 
 co(function* () {
   console.log('Starting request');
-  var response = yield get('http://www.vg.no');
+  var response = yield get('http://www.bekk.no');
   console.log('Request done! Server: %j', response.headers.server);
 })()
 
 // Will output
 // Starting request
-// Request done! Server: "Apache/2.2.15 (CentOS)"
+// Request done! Server: "Microsoft-IIS/7.5"
 ```
 
 And it doesn't stop there! Why not make a couple of requests in parallell:
@@ -167,27 +168,27 @@ var get = require('./lib/get');
 
 co(function* () {
   console.log('Starting requests');
-  var responses = yield [get('http://www.vg.no'), get('http://www.db.no')];
-  console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
+  var responses = yield [get('http://www.bekk.no'), get('http://www.google.no')];
+  console.log('Requests done! bekk: %j, google: %j', responses[0].headers.server, responses[1].headers.server);
 })()
 
 // Will output
 // Starting requests
-// Requests done! vg: "Apache/2.2.15 (CentOS)", db: "Apache/2.2.27"
+// Requests done! bekk: "Microsoft-IIS/7.5", google: "gws"
 
 ```
 
-This is just `co` doing all the heavy lifting. We pass an array of promises to
-yield and we get an array of fullfilled promises back. Requests run in parallell,
-but still there is not a single callback in our code!
+Here, `co` does all the heavy lifting for us. We pass an array of promises to
+yield and we get an array of fulfilled promises back. Requests run in
+parallell, but still there is not a single callback in our code!
 
 ## Exceptions
 
-So what to do when we get exceptional behaviour, like a failed http-request in
-the example above? The code that runs the generator is in a position to do
+So what to do when we get exceptional behaviour? Imagine one of the http requests in
+the example above. The code that runs the generator is in a position to do
 whatever it finds suitable. If we find it necessary, we can trigger an exception
 at the yield call inside the generator. This is done using a `throw` method we
-cab call on the generator object. Let's have a look at how this works:
+can call on the generator object. Let's have a look at how this works:
 
 ```javascript
 function *performSomethingExceptional(){
@@ -202,7 +203,7 @@ function *performSomethingExceptional(){
 }
 
 var generatorObject = performSomethingExceptional();
-// start generator so the generator pauses at 'yield'
+// start generator so it runs until 'yield'
 generatorObject.next();
 // now make the generator throw an exception at the yield
 // inside the generator!
@@ -211,15 +212,14 @@ generatorObject.throw("My custom thrown exception");
 // Will output
 // Starting generator
 // Got exception! "My custom thrown exception"
-
 ```
 
-Of course this example doesn't do much of use, but looking at the code inside
-the generator, we can see that the exeption handling looks very familiar, and
-still, we have no callbacks inside the generator!
+Of course this example doesn't do much of use. But, looking at the code inside
+the generator, we can see that the exeption handling looks very familiar. And
+still we have no callbacks inside the generator!
 
 The [co](https://github.com/visionmedia/co) library we used earlier does exactly
-what it should do when it comes to handling exceptions. Lets look at an example
+what it should do when it comes to handling exceptions. Let's look at an example
 with a failing http request:
 
 ```javascript
@@ -229,8 +229,8 @@ var get = require('./lib/get');
 co(function* () {
   try {
     console.log('Starting requests');
-    var responses = yield [get('http://notfound.blabla'), get('http://db.no')];
-    console.log('Requests done! vg: %j, db: %j', responses[0].headers.server, responses[1].headers.server);
+    var responses = yield [get('http://notfound.blabla'), get('http://www.bekk.no')];
+    console.log('Requests done! notfound: %j, bekk: %j', responses[0].headers.server, responses[1].headers.server);
   }
   catch (e) {
     console.log('Got error: %j for host %j', e.code, e.hostname);
@@ -242,8 +242,8 @@ co(function* () {
 // Got error: "ENOTFOUND" for host "notfound.blabla"
 ```
 
-So now we make asynchronous http requests in parallel, we have synchronous
-looking code, and we even have familiar exception handling! IS THIS GREAT OR
+So now we make asynchronous http requests in parallel, with synchronous looking
+code. And we even have familiar looking exception handling! IS THIS GREAT OR
 WHAT??
 
 Phew! So with this we have covered quite a bit. Don't worry if you didn't follow
