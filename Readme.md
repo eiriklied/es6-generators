@@ -1,6 +1,8 @@
-# Generators
+# Generators from scratch
 
-> from nothing to... something
+> Generators are coming in ECMAScript 6 (that means JavaScript). While they
+> look very much like good old functions they can do miracles to your
+> asynchronous code.
 
 ## What are generators?
 
@@ -160,7 +162,7 @@ co(function* () {
 // Request done! Server: "Microsoft-IIS/7.5"
 ```
 
-And it doesn't stop there! Why not make a couple of requests in parallell:
+And it doesn't stop there! Why not make a couple of requests in parallel:
 
 ```javascript
 var co = require('co');
@@ -180,7 +182,7 @@ co(function* () {
 
 Here, `co` does all the heavy lifting for us. We pass an array of promises to
 yield and we get an array of fulfilled promises back. Requests run in
-parallell, but still there is not a single callback in our code!
+parallel, but still there is not a single callback in our code!
 
 ## Exceptions
 
